@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Crude Project</title>
+  </head>
+  <body>
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+
+        <h4 style="color:rgb(245, 22, 171); text-align: center; font-weight: 900;">Views Form</h4>
+        <h1><a href="/" class="btn btn-secondary mt-2">← Back to Home</a></h1>
+
+        <div class="d-flex mb-3">
+            <a href="{% url 'recycle' %}" class="btn btn-warning ms-auto">
+                Recycle Bin
+            </a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S.N</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.age }}</td>
+                    <td>{{ i.address }}</td>
+                    <td>{{ i.contact }}</td>
+                    <td>{{ i.email }}</td>
+                    <td>
+                        <a href="{% url 'edit' i.id %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+
+                        <a href="{% url 'delete' i.id %}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete?')">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>  
+  </body>
+</html>

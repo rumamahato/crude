@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<title>Recycle Bin</title>
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+<h3 style="color:rgb(231, 48, 88); text-align:center; font-weight:900;">
+Recycle Bin
+</h3>
+
+<a href="{% url 'home' %}"
+class="btn btn-secondary mb-3">
+
+Back Home
+</a>
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>S.N</th>
+<th>Name</th>
+<th>Age</th>
+<th>Address</th>
+<th>Contact</th>
+<th>Email</th>
+<th>Action</th>
+</tr>
+
+</thead>
+<tbody>
+{% for i in data %}
+<tr>
+
+<td>{{forloop.counter}}</td>
+<td>{{i.name}}</td>
+<td>{{i.age}}</td>
+<td>{{i.address}}</td>
+<td>{{i.contact}}</td>
+<td>{{i.email}}</td>
+
+<td>
+
+<a href="{% url 'restore' i.id %}" class="btn btn-success btn-sm">
+    Restore
+</a>
+
+<a href="{% url 'permanent_delete' i.id %}"
+   class="btn btn-danger btn-sm"
+   onclick="return confirm('Permanently delete this data?')">
+    Delete Forever
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</body>
+</html>
