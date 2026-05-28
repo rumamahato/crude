@@ -52,24 +52,35 @@
     </style>
 
 </head>
-<link rel="stylesheet"href="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
+<link rel="stylesheet" href="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script src="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
 
 <script>
-$(document).ready(function () {
-    $('#nepali-date').nepaliDatePicker({
-        ndpYear: true,
-        ndpMonth: true
+    $(document).ready(function () {
+        $('#nepali-date').nepaliDatePicker({
+            ndpYear: true,
+            ndpMonth: true
+        });
     });
-});
 </script>
+
 <body>
 
     <div class="col-md-6">
+        <div class="d-flex justify-content-end mb-3">
 
+    <button type="button" id="btnEnglish" class="btn btn-secondary me-2">
+        English
+    </button>
+
+    <button type="button" id="btnNepali" class="btn btn-success">
+        नेपाली
+    </button>
+
+</div>
         <div class="card">
             <div class="card-header">
                 Add Student Form
@@ -82,47 +93,47 @@ $(document).ready(function () {
 
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
-                        <input type="text" name="name" class="form-control" required>
+                        <input type="text" name="name" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Age</label>
-                        <input type="number" name="age" class="form-control" required>
+                        <input type="number" name="age" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Address</label>
-                        <input type="text" name="address" class="form-control" required>
+                        <input type="text" name="address" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" required>
+                        <input type="email" name="email" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">DOB</label>
-                        <input type="text" id="nepali-date" name="DOB" class="form-control" required>
+                        <input type="text" id="nepali-date" name="DOB" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Contact</label>
-                        <input type="number" name="contact" class="form-control" required>
+                        <input type="number" name="contact" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">image</label>
-                        <input type="file" name="image" class="form-control" required>
+                        <input type="file" name="image" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">video</label>
-                        <input type="file" name="video" class="form-control" required>
+                        <input type="file" name="video" class="form-control lang-input" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">pdf</label>
-                        <input type="file" name="pdf" class="form-control" required>
+                        <input type="file" name="pdf" class="form-control lang-input" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary">
@@ -136,6 +147,56 @@ $(document).ready(function () {
 
     </div>
     
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            let mode = "english";
+
+            document.getElementById("btnEnglish").addEventListener("click", function () {
+                mode = "english";
+                alert("English mode ON");
+            });
+
+            document.getElementById("btnNepali").addEventListener("click", function () {
+                mode = "nepali";
+                alert("नेपाली mode ON");
+            });
+
+            function toNepali(text) {
+                return text
+                    .replace(/a/g, "अ")
+                    .replace(/b/g, "ब")
+                    .replace(/c/g, "क")
+                    .replace(/d/g, "द")
+                    .replace(/e/g, "ए")
+                    .replace(/g/g, "ग")
+                    .replace(/h/g, "ह")
+                    .replace(/i/g, "इ")
+                    .replace(/k/g, "क")
+                    .replace(/l/g, "ल")
+                    .replace(/m/g, "म")
+                    .replace(/n/g, "न")
+                    .replace(/o/g, "ओ")
+                    .replace(/p/g, "प")
+                    .replace(/r/g, "र")
+                    .replace(/s/g, "स")
+                    .replace(/t/g, "त")
+                    .replace(/u/g, "उ")
+                    .replace(/y/g, "य");
+            }
+
+            document.querySelectorAll(".lang-input").forEach(input => {
+                input.addEventListener("input", function () {
+
+                    if (mode === "nepali") {
+                        this.value = toNepali(this.value);
+                    }
+
+                });
+            });
+
+        });
+    </script>
 </body>
 
 </html>
