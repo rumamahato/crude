@@ -1,63 +1,139 @@
+{% load nepali_date %}
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Crude Project</title>
-  </head>
-  <body>
-    <div class="container mt-5">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <title>CRUD Project</title>
+</head>
+   
+    <link rel="stylesheet"type="text/css" href="//cdn.datatables.net/2.3.8/js/dataTables.min.js">
+    <script>"https://cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css"</script>
+<body>
+
+<div class="container mt-5">
     <div class="row justify-content-center">
 
-        <h4 style="color:rgb(245, 22, 171); text-align: center; font-weight: 900;">Views Form</h4>
-        <h1><a href="/" class="btn btn-secondary mt-2">← Back to Home</a></h1>
+        <div class="col">
 
-        <div class="d-flex mb-3">
-            <a href="{% url 'recycle' %}" class="btn btn-warning ms-auto">
-                Recycle Bin
+            <h4 style="color:rgb(245,22,171); text-align:center; font-weight:900;">
+                Views Form
+            </h4>
+
+            <a href="/" class="btn btn-secondary mt-2">
+                ← Back to Home
             </a>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>S.N</th>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Address</th>
-                    <th>Contact</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
 
-            <tbody>
+            <div class="d-flex mb-3 mt-3">
+                <a href="{% url 'recycle' %}" class="btn btn-warning ms-auto">
+                    Recycle Bin
+                </a>
+            </div>
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark" id="myTable">
+                    <tr>
+                        <th>S.N</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                        <th>DOB</th>
+                        <th>Email</th>
+                        <th>Image</th>
+                        <th>Video</th>
+                        <th>PDF</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
                 {% for i in data %}
                 <tr>
+
                     <td>{{ forloop.counter }}</td>
                     <td>{{ i.name }}</td>
                     <td>{{ i.age }}</td>
                     <td>{{ i.address }}</td>
                     <td>{{ i.contact }}</td>
+                    <td>{{ i.DOB|nepali }}</td>
                     <td>{{ i.email }}</td>
+
+                    <!-- Image -->
                     <td>
-                        <a href="{% url 'edit' i.id %}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-pencil-square"></i> Edit
+                        {% if i.image %}
+                            <img src="{{ i.image.url }}"width="50"height="50"alt="image">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+
+                    <!-- Video -->
+                    <td>
+                        {% if i.video %}
+                            <a href="{{ i.video.url }}" target="_blank">
+                                View Video
+                            </a>
+                        {% else %}
+                            No Video
+                        {% endif %}
+                    </td>
+
+                    <!-- PDF -->
+                    <td>
+                        {% if i.pdf %}
+                            <a href="{{ i.pdf.url }}" target="_blank">
+                                Open PDF
+                            </a>
+                        {% else %}
+                            No PDF
+                        {% endif %}
+                    </td>
+
+                    <!-- Action -->
+                    <td>
+
+                        <a href="{% url 'edit' i.id %}"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                            Edit
                         </a>
 
-                        <a href="{% url 'delete' i.id %}" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Are you sure you want to delete?')">
-                            <i class="bi bi-trash"></i> Delete
+                        <a href="{% url 'delete' i.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete?')">
+
+                            <i class="bi bi-trash"></i>
+                            Delete
+
                         </a>
+
                     </td>
+
                 </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
-</div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>  
-  </body>
+</div> 
+    <script>
+        let table = new DataTable('#myTable');
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
 </html>
