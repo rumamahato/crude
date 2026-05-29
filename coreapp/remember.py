@@ -10,7 +10,7 @@
 #from django import template
 #import nepali_datetime
 #register = template.Library()
-#@register.filter
+#@register.filter            custom filter बनाउन प्रयोग हुन्छ। ntr {{ student.DOB|nepali_date }} kam grdain--------->
 #def nepali(value):   -------------->Template मा यस्तो प्रयोग हुन्छ {{ i.DOB|nepali }}
 #    if value:
 #        try:
@@ -45,55 +45,54 @@
 
 #***********------ english letter convetred in nepali letter *********** --------------->
 #------column ko mathi rakhne ----------->
-#1)<div class="d-flex justify-content-end mb-3">
+#1). <div class="d-flex justify-content-end mb-3">            --------->english lai switch grer nepali ma lagne 
 #    <button type="button" id="btnEnglish" class="btn btn-secondary me-2">
 #        English
 #    </button>
-#    <button type="button" id="btnNepali" class="btn btn-success">
+#    <button type="button" id="btnNepali" class="btn btn-success">    ------->english lai switch grer nepali ma lagne 
 #        नेपाली
 #    </button>
 #</div>
 
-#2). input-------> class="form-control lang-input"
-#3). <!'''<script>
-#document.addEventListener("DOMContentLoaded", function () {
-#    let mode = "english";
-#    document.getElementById("btnEnglish").addEventListener("click", function () {
-#        mode = "english";
-#        alert("English mode ON");
-#    });
-#    document.getElementById("btnNepali").addEventListener("click", function () {
-#        mode = "nepali";
-#        alert("नेपाली mode ON");
-#    });
-#    function toNepali(text) {
-#        return text
-#            .replace(/a/g, "अ")
-#            .replace(/b/g, "ब")
-#            .replace(/c/g, "क")
-#            .replace(/d/g, "द")
-#            .replace(/e/g, "ए")
-#            .replace(/g/g, "ग")
-#            .replace(/h/g, "ह")
-#            .replace(/i/g, "इ")
-#            .replace(/k/g, "क")
-#            .replace(/l/g, "ल")
-#            .replace(/m/g, "म")
-#            .replace(/n/g, "न")
-#            .replace(/o/g, "ओ")
-#            .replace(/p/g, "प")
-#            .replace(/r/g, "र")
-#            .replace(/s/g, "स")
-#            .replace(/t/g, "त")
-#            .replace(/u/g, "उ")
-#            .replace(/y/g, "य");
-#    }
-#    document.querySelectorAll(".lang-input").forEach(input => {
-#        input.addEventListener("input", function () {
-#            if (mode === "nepali") {
-#                this.value = toNepali(this.value);
-#            }
+#2). input-------> class="form-control lang-input"    ------->lang-input भएको सबै input मा language conversion लागू हुन्छ।
+#3).<script>
+#        document.addEventListener("DOMContentLoaded", function () {
+#            let mode = "english";
+#            // ENGLISH BUTTON
+#            document.getElementById("btnEnglish").addEventListener("click", function () {
+#                mode = "english";
+#                // FORM TITLE
+#                document.getElementById("formTitle").innerText = "Add Student Form";
+#                // LABELS
+#                document.getElementById("lblName").innerText = "Full Name";
+#                document.getElementById("lblAge").innerText = "Age";
+#                document.getElementById("lblAddress").innerText = "Address";
+#                document.getElementById("lblEmail").innerText = "Email";
+#                document.getElementById("lblDOB").innerText = "DOB";
+#                document.getElementById("lblContact").innerText = "Contact";
+#                document.getElementById("lblImage").innerText = "Image";
+#                document.getElementById("lblVideo").innerText = "Video";
+#                document.getElementById("lblPDF").innerText = "PDF";
+#                // BUTTON
+#                document.getElementById("submitBtn").innerText = "Submit";#
+#            });#
+#            // NEPALI BUTTON
+#            document.getElementById("btnNepali").addEventListener("click", function () {#
+#                mode = "nepali";
+#                // FORM TITLE
+#                document.getElementById("formTitle").innerText = "विद्यार्थी फारम";#
+#                // LABELS
+#                document.getElementById("lblName").innerText = "पूरा नाम";
+#                document.getElementById("lblAge").innerText = "उमेर";
+#                document.getElementById("lblAddress").innerText = "ठेगाना";
+#                document.getElementById("lblEmail").innerText = "इमेल";
+#                document.getElementById("lblDOB").innerText = "जन्म मिति";
+#                document.getElementById("lblContact").innerText = "सम्पर्क";
+#                document.getElementById("lblImage").innerText = "तस्वीर";
+#                document.getElementById("lblVideo").innerText = "भिडियो";
+#                document.getElementById("lblPDF").innerText = "पीडीएफ";#
+#                // BUTTON
+#                document.getElementById("submitBtn").innerText = "पेश गर्नुहोस्";#
+#            });#
 #        });
-#    });
-#});
-#</script>
+#    </script>

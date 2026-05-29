@@ -5,152 +5,178 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Edit Form</title>
-</head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nepali-datepicker-reactjs/dist/index.css">
-<link rel="stylesheet" href="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <title>Edit Student</title>
 
-<script src="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#nepali-date').nepaliDatePicker({
-            ndpYear: true,
-            ndpMonth: true
-        });
-    });
-</script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0aa88b, #8f9cd4);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+        }
+
+        .card-header {
+            background: #a7a4e0;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="d-flex justify-content-end mb-3">
 
-                <button type="button" id="btnEnglish" class="btn btn-secondary me-2">
-                    English
+<div class="col-md-6">
+
+    <div class="d-flex justify-content-end mb-3">
+        <button type="button" id="btnEnglish" class="btn btn-secondary me-2">English</button>
+        <button type="button" id="btnNepali" class="btn btn-success">नेपाली</button>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="formTitle">
+            Edit Student Form
+        </div>
+
+        <div class="card-body p-4">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label id="lblName">Full Name</label>
+                    <input type="text" name="name" value="{{ data.name }}" class="form-control lang-input">
+                </div>
+
+                <div class="mb-3">
+                    <label id="lblAge">Age</label>
+                    <input type="number" name="age" value="{{ data.age }}" class="form-control lang-input">
+                </div>
+
+                <div class="mb-3">
+                    <label id="lblAddress">Address</label>
+                    <input type="text" name="address" value="{{ data.address }}" class="form-control lang-input">
+                </div>
+
+                <div class="mb-3">
+                    <label id="lblEmail">Email</label>
+                    <input type="email" name="email" value="{{ data.email }}" class="form-control lang-input">
+                </div>
+
+                <div class="mb-3">
+                    <label id="lblDOB">DOB</label>
+                    <input type="text" name="DOB" value="{{ data.DOB }}" class="form-control lang-input">
+                </div>
+
+                <div class="mb-3">
+                    <label id="lblContact">Contact</label>
+                    <input type="text" name="contact" value="{{ data.contact }}" class="form-control lang-input">
+                </div>
+
+                <!-- FILES -->
+                <div class="mb-3">
+                    <label id="lblImage">Image</label>
+                    <input type="file" name="image" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label id="lblVideo">Video</label>
+                    <input type="file" name="video" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label id="lblPDF">PDF</label>
+                    <input type="file" name="pdf" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-success" id="btnUpdate">
+                    Update
                 </button>
 
-                <button type="button" id="btnNepali" class="btn btn-success">
-                    नेपाली
-                </button>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
 
-            </div>
-            <div class="col-md-6">
+            </form>
 
-                <h4 style="color:rgb(15, 6, 100); text-align:center; font-weight:900;">
-                    Edit Student Data
-                </h4>
-
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <div class="mb-3">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" name="name" value="{{ data.name }}" class="form-control lang-input" required">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Age</label>
-                        <input type="number" name="age" value="{{ data.age }}" class="form-control lang-input" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <input type="text" name="address" value="{{ data.address }}" class="form-control lang-input" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" value="{{ data.email }}" class="form-control lang-input" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">DOB</label>
-                        <input type="text" id="nepali-date" name="DOB" class="form-control lang-input" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Contact</label>
-                        <input type="text" name="contact" value="{{ data.contact }}" class="form-control lang-input" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">image</label>
-                        <input type="file" name="image" class="form-control lang-input" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">video</label>
-                        <input type="file" name="video" class="form-control lang-input" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">pdf</label>
-                        <input type="file" name="pdf" class="form-control lang-input" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-success" onclick="return confirm('Edit is successful')">
-                        Update
-                    </button>
-
-                    <a href="{% url 'home' %}" class="btn btn-secondary">
-                        Back
-                    </a>
-
-                </form>
-
-            </div>
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
 
-            let mode = "english";
+</div>
 
-            document.getElementById("btnEnglish").addEventListener("click", function () {
-                mode = "english";
-                alert("English mode ON");
-            });
+<script>
+let mode = "english";
 
-            document.getElementById("btnNepali").addEventListener("click", function () {
-                mode = "nepali";
-                alert("नेपाली mode ON");
-            });
+const inputs = document.querySelectorAll(".lang-input");
 
-            function toNepali(text) {
-                return text
-                    .replace(/a/g, "अ")
-                    .replace(/b/g, "ब")
-                    .replace(/c/g, "क")
-                    .replace(/d/g, "द")
-                    .replace(/e/g, "ए")
-                    .replace(/g/g, "ग")
-                    .replace(/h/g, "ह")
-                    .replace(/i/g, "इ")
-                    .replace(/k/g, "क")
-                    .replace(/l/g, "ल")
-                    .replace(/m/g, "म")
-                    .replace(/n/g, "न")
-                    .replace(/o/g, "ओ")
-                    .replace(/p/g, "प")
-                    .replace(/r/g, "र")
-                    .replace(/s/g, "स")
-                    .replace(/t/g, "त")
-                    .replace(/u/g, "उ")
-                    .replace(/y/g, "य");
-            }
+// ================= LANGUAGE TOGGLE =================
+document.getElementById("btnEnglish").addEventListener("click", function () {
+    mode = "english";
 
-            document.querySelectorAll(".lang-input").forEach(input => {
-                input.addEventListener("input", function () {
+    document.getElementById("formTitle").innerText = "Edit Student Form";
+    document.getElementById("lblName").innerText = "Full Name";
+    document.getElementById("lblAge").innerText = "Age";
+    document.getElementById("lblAddress").innerText = "Address";
+    document.getElementById("lblEmail").innerText = "Email";
+    document.getElementById("lblDOB").innerText = "DOB";
+    document.getElementById("lblContact").innerText = "Contact";
+    document.getElementById("lblImage").innerText = "Image";
+    document.getElementById("lblVideo").innerText = "Video";
+    document.getElementById("lblPDF").innerText = "PDF";
+    document.getElementById("btnUpdate").innerText = "Update";
+});
 
-                    if (mode === "nepali") {
-                        this.value = toNepali(this.value);
-                    }
+document.getElementById("btnNepali").addEventListener("click", function () {
+    mode = "nepali";
 
-                });
-            });
+    document.getElementById("formTitle").innerText = "विद्यार्थी सम्पादन फारम";
+    document.getElementById("lblName").innerText = "पूरा नाम";
+    document.getElementById("lblAge").innerText = "उमेर";
+    document.getElementById("lblAddress").innerText = "ठेगाना";
+    document.getElementById("lblEmail").innerText = "इमेल";
+    document.getElementById("lblDOB").innerText = "जन्म मिति";
+    document.getElementById("lblContact").innerText = "सम्पर्क";
+    document.getElementById("lblImage").innerText = "तस्वीर";
+    document.getElementById("lblVideo").innerText = "भिडियो";
+    document.getElementById("lblPDF").innerText = "पीडीएफ";
+    document.getElementById("btnUpdate").innerText = "अपडेट";
+});
 
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+// ================= INPUT CONVERSION =================
+function toNepali(text) {
+    return text
+        .replace(/a/g, "अ")
+        .replace(/b/g, "ब")
+        .replace(/c/g, "क")
+        .replace(/d/g, "द")
+        .replace(/e/g, "ए")
+        .replace(/g/g, "ग")
+        .replace(/h/g, "ह")
+        .replace(/i/g, "इ")
+        .replace(/k/g, "क")
+        .replace(/l/g, "ल")
+        .replace(/m/g, "म")
+        .replace(/n/g, "न")
+        .replace(/o/g, "ओ")
+        .replace(/p/g, "प")
+        .replace(/r/g, "र")
+        .replace(/s/g, "स")
+        .replace(/t/g, "त")
+        .replace(/u/g, "उ")
+        .replace(/y/g, "य");
+}
+
+inputs.forEach(input => {
+    input.addEventListener("input", function () {
+        if (mode === "nepali") {
+            this.value = toNepali(this.value);
+        }
+    });
+});
+</script>
+
 </body>
-
 </html>
