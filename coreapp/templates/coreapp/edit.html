@@ -38,72 +38,6 @@
 <!-- Nepali Converter -->
 <script src="https://unpkg.com/nepali-date-converter/dist/nepali-date-converter.umd.min.js"></script>
 
-<script>
-window.addEventListener("load", function () {
-
-    const nepaliInput = document.getElementById("nepali-date");
-    const englishInput = document.getElementById("english-date");
-
-    // 🔥 CLEAN "बिही, जेठ १४, २०८३" → "2083-02-14"
-    function cleanBS(bsText) {
-
-        const match = bsText.match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
-
-        if (!match) return null;
-
-        return `${match[1]}-${match[2].padStart(2,'0')}-${match[3].padStart(2,'0')}`;
-    }
-
-    // 🔥 BS → AD converter
-    function convertBS2AD(bs) {
-        if (!bs) return null;
-
-        const parts = bs.split("-");
-        if (parts.length !== 3) return null;
-
-        const ad = NepaliFunctions.BS2AD({
-            year: Number(parts[0]),
-            month: Number(parts[1]),
-            day: Number(parts[2])
-        });
-
-        return `${ad.year}-${String(ad.month).padStart(2,'0')}-${String(ad.day).padStart(2,'0')}`;
-    }
-
-    // 🔥 DATE PICKER
-    $(nepaliInput).nepaliDatePicker({
-
-        ndpYear: true,
-        ndpMonth: true,
-        ndpDate: true,
-        closeOnDateSelect: true,
-
-        onSelect: function (date) {
-
-            // raw output from picker
-            let raw = `${date.year}-${date.month}-${date.day}`;
-
-            // clean format (force 2-digit)
-            let bs = cleanBS(raw) || raw;
-
-            nepaliInput.value = bs;                   // 2083-02-14
-            englishInput.value = convertBS2AD(bs);    // 2026-08-30
-        }
-    });
-
-    // 🔥 manual typing support
-    nepaliInput.addEventListener("input", function () {
-
-        let cleaned = this.value.replace(/[^0-9\-]/g, "");
-
-        this.value = cleaned;
-
-        englishInput.value = convertBS2AD(cleaned) || "";
-    });
-
-});
-</script>
-
 <body>
 
     <div class="col-md-6">
@@ -154,16 +88,12 @@ window.addEventListener("load", function () {
 
                     <div class="mb-3">
                         <label id="lblDOB">DOB</label>
-
                         <div class="row">
-                            <!-- Nepali Date -->
                             <div class="col-md-6">
-                                <input type="text" id="nepali-date" class="form-control" placeholder="नेपाली मिति (BS)">
+                                <input type="text" id="bs-date" name="bs_date" class="form-control" placeholder="YYYY-MM-DD (BS)">
                             </div>
-
-                            <!-- English Date -->
                             <div class="col-md-6">
-                                <input type="date" id="english-date" name="DOB" class="form-control">
+                                <input type="text" id="ad-date" name="DOB" class="form-control" placeholder="YYYY-MM-DD (AD)" readonly value="{{DOB}}">
                             </div>
                         </div>
                     </div>
@@ -202,73 +132,132 @@ window.addEventListener("load", function () {
 
     </div>
 
-    <script>
-        let mode = "english";
+   <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-        const inputs = document.querySelectorAll(".lang-input");
+            let mode = "english";
+            const inputs = document.querySelectorAll(".lang-input");
+            const bsInput = document.getElementById("bs-date");
+            const adOutput = document.getElementById("ad-date");
 
-        // ================= LANGUAGE TOGGLE =================
-        document.getElementById("btnEnglish").addEventListener("click", function () {
-            mode = "english";
+            // ==========================================
+            // YOUR CUSTOM BS -> AD MATHEMATICAL CONVERTER
+            // ==========================================
+            bsInput.addEventListener("input", function () {
+                const value = this.value.trim();
+                const parts = value.split("-");
 
-            document.getElementById("formTitle").innerText = "Edit Student Form";
-            document.getElementById("lblName").innerText = "Full Name";
-            document.getElementById("lblAge").innerText = "Age";
-            document.getElementById("lblAddress").innerText = "Address";
-            document.getElementById("lblEmail").innerText = "Email";
-            document.getElementById("lblDOB").innerText = "DOB";
-            document.getElementById("lblContact").innerText = "Contact";
-            document.getElementById("lblImage").innerText = "Image";
-            document.getElementById("lblVideo").innerText = "Video";
-            document.getElementById("lblPDF").innerText = "PDF";
-            document.getElementById("btnUpdate").innerText = "Update";
-        });
-
-        document.getElementById("btnNepali").addEventListener("click", function () {
-            mode = "nepali";
-
-            document.getElementById("formTitle").innerText = "विद्यार्थी सम्पादन फारम";
-            document.getElementById("lblName").innerText = "पूरा नाम";
-            document.getElementById("lblAge").innerText = "उमेर";
-            document.getElementById("lblAddress").innerText = "ठेगाना";
-            document.getElementById("lblEmail").innerText = "इमेल";
-            document.getElementById("lblDOB").innerText = "जन्म मिति";
-            document.getElementById("lblContact").innerText = "सम्पर्क";
-            document.getElementById("lblImage").innerText = "तस्वीर";
-            document.getElementById("lblVideo").innerText = "भिडियो";
-            document.getElementById("lblPDF").innerText = "पीडीएफ";
-            document.getElementById("btnUpdate").innerText = "अपडेट";
-        });
-
-        // ================= INPUT CONVERSION =================
-        function toNepali(text) {
-            return text
-                .replace(/a/g, "अ")
-                .replace(/b/g, "ब")
-                .replace(/c/g, "क")
-                .replace(/d/g, "द")
-                .replace(/e/g, "ए")
-                .replace(/g/g, "ग")
-                .replace(/h/g, "ह")
-                .replace(/i/g, "इ")
-                .replace(/k/g, "क")
-                .replace(/l/g, "ल")
-                .replace(/m/g, "म")
-                .replace(/n/g, "न")
-                .replace(/o/g, "ओ")
-                .replace(/p/g, "प")
-                .replace(/r/g, "र")
-                .replace(/s/g, "स")
-                .replace(/t/g, "त")
-                .replace(/u/g, "उ")
-                .replace(/y/g, "य");
-        }
-
-        inputs.forEach(input => {
-            input.addEventListener("input", function () {
-                if (mode === "nepali") {
-                    this.value = toNepali(this.value);
+                // Keep output empty while the user is still typing the full date layout
+                if (parts.length !== 3 || parts[2] === "") {
+                    adOutput.value = "";
+                    return;
                 }
+
+                const bsYear = parseInt(parts[0]);
+                const bsMonth = parseInt(parts[1]);
+                const bsDay = parseInt(parts[2]);
+
+                if (isNaN(bsYear) || isNaN(bsMonth) || isNaN(bsDay)) {
+                    adOutput.value = "Invalid input";
+                    return;
+                }
+
+                // Utilizing your custom conversion rules directly
+                let adYear = bsYear - 56;
+                let adMonth = bsMonth - 8;
+                let adDay = bsDay;
+
+                if (adMonth <= 0) {
+                    adYear -= 1;
+                    adMonth += 12;
+                }
+
+                const adDate = new Date(adYear, adMonth - 1, adDay);
+
+                // Format output cleanly into standard YYYY-MM-DD format
+                if (!isNaN(adDate.getTime())) {
+                    const yyyy = adDate.getFullYear();
+                    const mm = String(adDate.getMonth() + 1).padStart(2, '0');
+                    const dd = String(adDate.getDate()).padStart(2, '0');
+                    adOutput.value = `${yyyy}-${mm}-${dd}`;
+                } else {
+                    adOutput.value = "Invalid Date Calculation";
+                }
+            });
+
+            // ==========================================
+            // NEPALI TEXT KEYBOARD SIMULATION
+            // ==========================================
+            function toNepali(text) {
+                return text
+                    .replace(/a/g, "अ")
+                    .replace(/b/g, "ब")
+                    .replace(/c/g, "क")
+                    .replace(/d/g, "द")
+                    .replace(/e/g, "ए")
+                    .replace(/g/g, "ग")
+                    .replace(/h/g, "ह")
+                    .replace(/i/g, "इ")
+                    .replace(/k/g, "क")
+                    .replace(/l/g, "ल")
+                    .replace(/m/g, "म")
+                    .replace(/n/g, "न")
+                    .replace(/o/g, "ओ")
+                    .replace(/p/g, "प")
+                    .replace(/r/g, "र")
+                    .replace(/s/g, "स")
+                    .replace(/t/g, "त")
+                    .replace(/u/g, "उ")
+                    .replace(/y/g, "य");
+            }
+
+            inputs.forEach(input => {
+                input.addEventListener("input", function () {
+                    if (mode === "nepali") {
+                        this.value = toNepali(this.value);
+                    }
+                });
+            });
+
+            // ==========================================
+            // LANGUAGE TRIGGER HANDLERS
+            // ==========================================
+            document.getElementById("btnEnglish").addEventListener("click", function () {
+                mode = "english";
+                inputs.forEach(i => i.value = "");
+                bsInput.value = "";
+                adOutput.value = "";
+
+                document.getElementById("formTitle").innerText = "Add Student Form";
+                document.getElementById("lblName").innerText = "Full Name";
+                document.getElementById("lblAge").innerText = "Age";
+                document.getElementById("lblAddress").innerText = "Address";
+                document.getElementById("lblEmail").innerText = "Email";
+                document.getElementById("lblDOB").innerText = "DOB";
+                document.getElementById("lblContact").innerText = "Contact";
+                document.getElementById("lblImage").innerText = "Image";
+                document.getElementById("lblVideo").innerText = "Video";
+                document.getElementById("lblPDF").innerText = "PDF";
+                document.getElementById("submitBtn").innerText = "Submit";
+            });
+
+            document.getElementById("btnNepali").addEventListener("click", function () {
+                mode = "nepali";
+                inputs.forEach(i => i.value = "");
+                bsInput.value = "";
+                adOutput.value = "";
+
+                document.getElementById("formTitle").innerText = "विद्यार्थी फारम";
+                document.getElementById("lblName").innerText = "पूरा नाम";
+                document.getElementById("lblAge").innerText = "उमेर";
+                document.getElementById("lblAddress").innerText = "ठेगाना";
+                document.getElementById("lblEmail").innerText = "इमेल";
+                document.getElementById("lblDOB").innerText = "जन्म मिति";
+                document.getElementById("lblContact").innerText = "सम्पर्क";
+                document.getElementById("lblImage").innerText = "तस्वीर";
+                document.getElementById("lblVideo").innerText = "भिडियो";
+                document.getElementById("lblPDF").innerText = "पीडीएफ";
+                document.getElementById("submitBtn").innerText = "पेश गर्नुहोस्";
             });
         });
     </script>
