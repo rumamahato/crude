@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -50,192 +51,237 @@
             background: #2418cf;
         }
     </style>
+    <style>
+        #btnEnglish:hover,
+        #btnNepali:hover {
+            background: #f1f1f1;
+            transform: scale(1.03);
+            transition: 0.2s;
+        }
+    </style>
+    
+    <link rel="stylesheet" href="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
 </head>
-<link rel="stylesheet"href="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
-
-<script>
-$(document).ready(function () {  
-    $('#nepali-date').nepaliDatePicker({ 
-        ndpYear: true,
-        ndpMonth: true
-    });
-});
-</script>
 
 <body>
 
-<div class="col-md-6">
+    <div class="col-md-6 my-4">
+        <div class="d-flex justify-content-end mb-3">
 
-    <!-- LANGUAGE BUTTONS -->
-    <div class="d-flex justify-content-end mb-3">
-        <button type="button" id="btnEnglish" class="btn btn-secondary me-2">English</button>
-        <button type="button" id="btnNepali" class="btn btn-success">नेपाली</button>
-    </div>
+            <button type="button" id="btnEnglish" class="btn btn-light border d-flex align-items-center gap-2 me-2">
+                <img src="{% static 'images/image.png' %}" width="30" height="33">
+                <span>english</span>
+            </button>
 
-    <div class="card">
-        <div class="card-header" id="formTitle">
-            Add Student Form
-        </div>
-
-        <div class="card-body p-4">
-
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="mb-3">
-                    <label id="lblName">Full Name</label>
-                    <input type="text"  name="name" class="form-control lang-input" required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblAge">Age</label>
-                    <input type="number" name="age" class="form-control lang-input" required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblAddress">Address</label>
-                    <input type="text"  name="address" class="form-control lang-input" required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblEmail">Email</label>
-                    <input type="email"  name="email" class="form-control " required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblDOB">DOB</label>
-                    <input type="text" id="nepali-date"  name="DOB"class="form-control lang-input" required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblContact">Contact</label>
-                    <input type="number" name="contact" class="form-control lang-input" required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblImage">Image</label>
-                    <input type="file"  name="image" class="form-controllang-input" required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblVideo">Video</label>
-                    <input type="file" name="video" class="form-control lang-input" required>
-                </div>
-
-                <div class="mb-3">
-                    <label id="lblPDF">PDF</label>
-                    <input type="file" name="pdf" class="form-control lang-input" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary" id="submitBtn">
-                    Submit
-                </button>
-
-            </form>
+            <button type="button" id="btnNepali" class="btn btn-light border d-flex align-items-center gap-2">
+                <img src="{% static 'images/nepal flag.png' %}" width="30" height="33">
+                <span>नेपाली</span>
+            </button>
 
         </div>
+
+        <div class="card">
+            <div class="card-header" id="formTitle">
+                Add Student Form
+            </div>
+
+            <div class="card-body p-4">
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label id="lblName">Full Name</label>
+                        <input type="text" name="name" class="form-control lang-input" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblAge">Age</label>
+                        <input type="number" name="age" class="form-control lang-input" min="0" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblAddress">Address</label>
+                        <input type="text" name="address" class="form-control lang-input" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblEmail">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblDOB">DOB</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" id="bs-date" name="bs_date" class="form-control" placeholder="YYYY-MM-DD (BS)">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" id="ad-date" name="DOB" class="form-control" placeholder="YYYY-MM-DD (AD)" readonly value="{{DOB}}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblContact">Contact</label>
+                        <input type="number" name="contact" class="form-control lang-input" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblImage">Image</label>
+                        <input type="file" name="image" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblVideo">Video</label>
+                        <input type="file" name="video" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="lblPDF">PDF</label>
+                        <input type="file" name="pdf" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        Submit
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-    let mode = "english";
+            let mode = "english";
+            const inputs = document.querySelectorAll(".lang-input");
+            const bsInput = document.getElementById("bs-date");
+            const adOutput = document.getElementById("ad-date");
 
-    const inputs = document.querySelectorAll(".lang-input");
+            // ==========================================
+            // YOUR CUSTOM BS -> AD MATHEMATICAL CONVERTER
+            // ==========================================
+            bsInput.addEventListener("input", function () {
+                const value = this.value.trim();
+                const parts = value.split("-");
 
-    // =========================
-    // NEPALI CONVERTER (basic)
-    // =========================
-    function toNepali(text) {
-        return text
-            .replace(/a/g, "अ")
-            .replace(/b/g, "ब")
-            .replace(/c/g, "क")
-            .replace(/d/g, "द")
-            .replace(/e/g, "ए")
-            .replace(/g/g, "ग")
-            .replace(/h/g, "ह")
-            .replace(/i/g, "इ")
-            .replace(/k/g, "क")
-            .replace(/l/g, "ल")
-            .replace(/m/g, "म")
-            .replace(/n/g, "न")
-            .replace(/o/g, "ओ")
-            .replace(/p/g, "प")
-            .replace(/r/g, "र")
-            .replace(/s/g, "स")
-            .replace(/t/g, "त")
-            .replace(/u/g, "उ")
-            .replace(/y/g, "य");
-    }
+                // Keep output empty while the user is still typing the full date layout
+                if (parts.length !== 3 || parts[2] === "") {
+                    adOutput.value = "";
+                    return;
+                }
 
-    // =========================
-    // INPUT LIVE CONVERT
-    // =========================
-    inputs.forEach(input => {
-        input.addEventListener("input", function () {
-            if (mode === "nepali") {
-                this.value = toNepali(this.value);
+                const bsYear = parseInt(parts[0]);
+                const bsMonth = parseInt(parts[1]);
+                const bsDay = parseInt(parts[2]);
+
+                if (isNaN(bsYear) || isNaN(bsMonth) || isNaN(bsDay)) {
+                    adOutput.value = "Invalid input";
+                    return;
+                }
+
+                // Utilizing your custom conversion rules directly
+                let adYear = bsYear - 56;
+                let adMonth = bsMonth - 8;
+                let adDay = bsDay;
+
+                if (adMonth <= 0) {
+                    adYear -= 1;
+                    adMonth += 12;
+                }
+
+                const adDate = new Date(adYear, adMonth - 1, adDay);
+
+                // Format output cleanly into standard YYYY-MM-DD format
+                if (!isNaN(adDate.getTime())) {
+                    const yyyy = adDate.getFullYear();
+                    const mm = String(adDate.getMonth() + 1).padStart(2, '0');
+                    const dd = String(adDate.getDate()).padStart(2, '0');
+                    adOutput.value = `${yyyy}-${mm}-${dd}`;
+                } else {
+                    adOutput.value = "Invalid Date Calculation";
+                }
+            });
+
+            // ==========================================
+            // NEPALI TEXT KEYBOARD SIMULATION
+            // ==========================================
+            function toNepali(text) {
+                return text
+                    .replace(/a/g, "अ")
+                    .replace(/b/g, "ब")
+                    .replace(/c/g, "क")
+                    .replace(/d/g, "द")
+                    .replace(/e/g, "ए")
+                    .replace(/g/g, "ग")
+                    .replace(/h/g, "ह")
+                    .replace(/i/g, "इ")
+                    .replace(/k/g, "क")
+                    .replace(/l/g, "ल")
+                    .replace(/m/g, "म")
+                    .replace(/n/g, "न")
+                    .replace(/o/g, "ओ")
+                    .replace(/p/g, "प")
+                    .replace(/r/g, "र")
+                    .replace(/s/g, "स")
+                    .replace(/t/g, "त")
+                    .replace(/u/g, "उ")
+                    .replace(/y/g, "य");
             }
+
+            inputs.forEach(input => {
+                input.addEventListener("input", function () {
+                    if (mode === "nepali") {
+                        this.value = toNepali(this.value);
+                    }
+                });
+            });
+
+            // ==========================================
+            // LANGUAGE TRIGGER HANDLERS
+            // ==========================================
+            document.getElementById("btnEnglish").addEventListener("click", function () {
+                mode = "english";
+                inputs.forEach(i => i.value = "");
+                bsInput.value = "";
+                adOutput.value = "";
+
+                document.getElementById("formTitle").innerText = "Add Student Form";
+                document.getElementById("lblName").innerText = "Full Name";
+                document.getElementById("lblAge").innerText = "Age";
+                document.getElementById("lblAddress").innerText = "Address";
+                document.getElementById("lblEmail").innerText = "Email";
+                document.getElementById("lblDOB").innerText = "DOB";
+                document.getElementById("lblContact").innerText = "Contact";
+                document.getElementById("lblImage").innerText = "Image";
+                document.getElementById("lblVideo").innerText = "Video";
+                document.getElementById("lblPDF").innerText = "PDF";
+                document.getElementById("submitBtn").innerText = "Submit";
+            });
+
+            document.getElementById("btnNepali").addEventListener("click", function () {
+                mode = "nepali";
+                inputs.forEach(i => i.value = "");
+                bsInput.value = "";
+                adOutput.value = "";
+
+                document.getElementById("formTitle").innerText = "विद्यार्थी फारम";
+                document.getElementById("lblName").innerText = "पूरा नाम";
+                document.getElementById("lblAge").innerText = "उमेर";
+                document.getElementById("lblAddress").innerText = "ठेगाना";
+                document.getElementById("lblEmail").innerText = "इमेल";
+                document.getElementById("lblDOB").innerText = "जन्म मिति";
+                document.getElementById("lblContact").innerText = "सम्पर्क";
+                document.getElementById("lblImage").innerText = "तस्वीर";
+                document.getElementById("lblVideo").innerText = "भिडियो";
+                document.getElementById("lblPDF").innerText = "पीडीएफ";
+                document.getElementById("submitBtn").innerText = "पेश गर्नुहोस्";
+            });
         });
-    });
-
-    // =========================
-    // ENGLISH MODE
-    // =========================
-    document.getElementById("btnEnglish").addEventListener("click", function () {
-
-        mode = "english";
-
-        // clear inputs
-        inputs.forEach(i => i.value = "");
-
-        document.getElementById("formTitle").innerText = "Add Student Form";
-
-        document.getElementById("lblName").innerText = "Full Name";
-        document.getElementById("lblAge").innerText = "Age";
-        document.getElementById("lblAddress").innerText = "Address";
-        document.getElementById("lblEmail").innerText = "Email";
-        document.getElementById("lblDOB").innerText = "DOB";
-        document.getElementById("lblContact").innerText = "Contact";
-        document.getElementById("lblImage").innerText = "Image";
-        document.getElementById("lblVideo").innerText = "Video";
-        document.getElementById("lblPDF").innerText = "PDF";
-
-        document.getElementById("submitBtn").innerText = "Submit";
-    });
-
-    // =========================
-    // NEPALI MODE
-    // =========================
-    document.getElementById("btnNepali").addEventListener("click", function () {
-
-        mode = "nepali";
-
-        // clear inputs
-        inputs.forEach(i => i.value = "");
-
-        document.getElementById("formTitle").innerText = "विद्यार्थी फारम";
-
-        document.getElementById("lblName").innerText = "पूरा नाम";
-        document.getElementById("lblAge").innerText = "उमेर";
-        document.getElementById("lblAddress").innerText = "ठेगाना";
-        document.getElementById("lblEmail").innerText = "इमेल";
-        document.getElementById("lblDOB").innerText = "जन्म मिति";
-        document.getElementById("lblContact").innerText = "सम्पर्क";
-        document.getElementById("lblImage").innerText = "तस्वीर";
-        document.getElementById("lblVideo").innerText = "भिडियो";
-        document.getElementById("lblPDF").innerText = "पीडीएफ";
-
-        document.getElementById("submitBtn").innerText = "पेश गर्नुहोस्";
-    });
-
-});
-</script>
-
+    </script>
 </body>
 </html>

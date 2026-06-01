@@ -33,17 +33,35 @@
 #8).<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 #<script src="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
 
+
+#===========nepali date click grda automatically english ma convert hune========
+#<script src="https://unpkg.com/nepali-date-converter/dist/nepali-date-converter.min.js"></script>
+
 #9).<script>
 #$(document).ready(function () {    -------->page पूरा load भएपछि मात्र code चलाउँछ
 #    $('#nepali-date').nepaliDatePicker({   ------>id भएको input select गर्छ  ----->त्यो input मा Nepali calendar जोड्छ
 #        ndpYear: true,
 #        ndpMonth: true ---------->month select option देखाउँछ
+#         onChange: function () {
+#            let bsDate = $("#nepali-date").val();
+#            try {  --------->nepali date click grda automatically english ma convert hune(add --no.1---no.2)
+#                let adDate = NepaliFunctions.BS2AD(bsDate);
+#                let englishDate =
+#                    adDate.year + "-" +
+#                    String(adDate.month).padStart(2, "0") + "-" +
+#                    String(adDate.day).padStart(2, "0");
+#                $("#english-date").val(englishDate);
+#            } catch (e) {    ---------no.1
+#                console.log("Conversion Error:", e);    ------no.2
+#            }
+#        }
 #    });
 #});
 #</script>
 
 
 #***********------ english letter convetred in nepali letter *********** --------------->
+
 #------column ko mathi rakhne ----------->
 #1). <div class="d-flex justify-content-end mb-3">            --------->english lai switch grer nepali ma lagne 
 #    <button type="button" id="btnEnglish" class="btn btn-secondary me-2">
@@ -96,3 +114,34 @@
 #            });#
 #        });
 #    </script>
+
+
+#============nepali converter================
+#<script>
+#// =========================
+#            // NEPALI CONVERTER (basic)
+#            // =========================
+#            function toNepali(text) {
+#                return text
+#                    .replace(/a/g, "अ")
+#                    .replace(/b/g, "ब")
+#                    .replace(/c/g, "क")
+#                    .replace(/d/g, "द")
+#                    .replace(/e/g, "ए")
+#                    .replace(/g/g, "ग")
+#                    .replace(/h/g, "ह")
+#                    .replace(/i/g, "इ")
+#                    .replace(/k/g, "क")
+#                    .replace(/l/g, "ल")
+#                    .replace(/m/g, "म")
+#                    .replace(/o/g, "ओ")
+#                    .replace(/p/g, "प")
+#                    .replace(/r/g, "र")
+#                    .replace(/s/g, "स")
+#                    .replace(/t/g, "त")
+#                    .replace(/u/g, "उ")
+#                    .replace(/y/g, "य");
+#            }
+# </script>
+
+
