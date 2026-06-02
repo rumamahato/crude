@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
+from django.core.validators import RegexValidator
+
 
 # IMAGE VALIDATION
 def validate_image(file):
@@ -29,7 +31,8 @@ class student(models.Model):
     age = models.IntegerField(validators=[MinValueValidator(0)])
     address = models.CharField(max_length=200)
     contact = models.CharField(
-    max_length=10,validators=[MinValueValidator(0)])
+    max_length=10,
+    validators=[RegexValidator(r'^\d{10}$', "Enter valid 10-digit number")])
     DOB = models.DateField(null=True, blank=True)
     email = models.EmailField()
     image = models.ImageField(upload_to='images/',null=True,blank=True,validators=[validate_image])

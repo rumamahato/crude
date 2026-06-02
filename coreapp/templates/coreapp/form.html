@@ -5,7 +5,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <title>Student Form</title>
@@ -50,19 +49,134 @@
         .btn-primary:hover {
             background: #2418cf;
         }
-    </style>
-    <style>
+
+        /* ==========================
+           DARK THEME
+        ========================== */
+        body.dark-theme {
+            background: linear-gradient(135deg, #121212, #2d3436);
+        }
+
+        body.dark-theme .card {
+            background: #1e1e1e;
+            color: white;
+        }
+
+        body.dark-theme .card-header {
+            background: #2c3e50;
+            color: white;
+        }
+
+        body.dark-theme label {
+            color: white;
+        }
+
+        body.dark-theme .form-control {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+        }
+
+        body.dark-theme .form-control::placeholder {
+            color: #bbb;
+        }
+
+        body.dark-theme .btn-light {
+            background: #444;
+            color: rgb(255, 255, 255);
+            border-color: #666;
+        }
+
+        body.dark-theme .btn-primary {
+            background: #6c5ce7;
+        }
+
+        body.dark-theme .btn-primary:hover {
+            background: #4834d4;
+        }
+
         #btnEnglish:hover,
         #btnNepali:hover {
             background: #f1f1f1;
             transform: scale(1.03);
             transition: 0.2s;
         }
+
+        /* ==========================
+           CUSTOM CALENDAR BOX STYLES
+        ========================== */
+        .calendar-wrapper {
+            position: relative;
+        }
+
+        .calendar-box {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1050;
+            width: 300px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            padding: 15px;
+        }
+
+        body.dark-theme .calendar-box {
+            background: #222;
+            border-color: #444;
+            color: #fff;
+        }
+
+        .calendar-box.active {
+            display: block;
+        }
+
+        .calendar-header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-header-controls select {
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .day-cell {
+            padding: 8px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .day-cell:hover {
+            background: #e63788;
+            color: #fff;
+        }
+
+        .day-cell.selected {
+            background: #6c5ce7;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .day-cell.empty {
+            cursor: default;
+            background: transparent !important;
+        }
     </style>
-    
-    <link rel="stylesheet" href="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
 </head>
 
 <body>
@@ -72,12 +186,15 @@
 
             <button type="button" id="btnEnglish" class="btn btn-light border d-flex align-items-center gap-2 me-2">
                 <img src="{% static 'images/image.png' %}" width="30" height="33">
-                <span>english</span>
+                <span>English</span>
             </button>
 
             <button type="button" id="btnNepali" class="btn btn-light border d-flex align-items-center gap-2">
                 <img src="{% static 'images/nepal flag.png' %}" width="30" height="33">
                 <span>नेपाली</span>
+            </button>
+            <button type="button" id="themeToggle" class="btn btn-dark border d-flex align-items-center gap-2 ms-2">
+                Dark
             </button>
 
         </div>
@@ -114,19 +231,46 @@
 
                     <div class="mb-3">
                         <label id="lblDOB">DOB</label>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="text" id="bs-date" name="bs_date" class="form-control" placeholder="YYYY-MM-DD (BS)">
+                        <div class="row position-relative">
+                            <div class="col-md-6 calendar-wrapper mb-2">
+                                <input type="text" id="bs-input" name="bs_date" class="form-control" placeholder="YYYY-MM-DD (BS)" autocomplete="off">
+                                
+                                <div id="bs-calendar-box" class="calendar-box">
+                                    <div class="calendar-header-controls">
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick="changeMonth('bs', -1)">&lt;</button>
+                                        <select id="bs-year-select" class="form-select form-select-sm d-inline-block w-auto"></select>
+                                        <select id="bs-month-select" class="form-select form-select-sm d-inline-block w-auto"></select>
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick="changeMonth('bs', 1)">&gt;</button>
+                                    </div>
+                                    <div class="days-grid text-muted small mb-1">
+                                        <div>आ</div><div>सो</div><div>मं</div><div>बु</div><div>बि</div><div>शु</div><div>श</div>
+                                    </div>
+                                    <div id="bs-days-container" class="days-grid"></div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <input type="text" id="ad-date" name="DOB" class="form-control" placeholder="YYYY-MM-DD (AD)" readonly value="{{DOB}}">
+                            
+                            <div class="col-md-6 calendar-wrapper mb-2">
+                                <input type="text" id="ad-input" name="DOB" class="form-control" placeholder="YYYY-MM-DD (AD)" readonly value="{{DOB}}">
+                                
+                                <div id="ad-calendar-box" class="calendar-box">
+                                    <div class="calendar-header-controls">
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick="changeMonth('ad', -1)">&lt;</button>
+                                        <select id="ad-year-select" class="form-select form-select-sm d-inline-block w-auto"></select>
+                                        <select id="ad-month-select" class="form-select form-select-sm d-inline-block w-auto"></select>
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick="changeMonth('ad', 1)">&gt;</button>
+                                    </div>
+                                    <div class="days-grid text-muted small mb-1">
+                                        <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                                    </div>
+                                    <div id="ad-days-container" class="days-grid"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label id="lblContact">Contact</label>
-                        <input type="number" name="contact" class="form-control lang-input" required>
+                        <input type="text" name="contact" class="form-control lang-input" maxlength="10" minlength="10" pattern="\d{10}" required>
                     </div>
 
                     <div class="mb-3">
@@ -155,61 +299,167 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        // Set the global start boundary based on your configuration dataset
+        const START_BS = 2069;
+        const END_BS = 2085;
+        
+        // Exact historical and structural configurations for BS 2070 - 2085
+        const bsData = {
+            2069: { days: [31,31,32,32,31,30,30,29,30,29,30,30], startAD: new Date(2013, 3, 14) },
+            2070: { days: [31,31,32,32,31,30,30,29,30,29,30,30], startAD: new Date(2013, 3, 14) },
+            2071: { days: [31,32,31,32,31,30,30,30,29,29,30,30], startAD: new Date(2014, 3, 14) },
+            2072: { days: [31,32,32,31,31,31,29,30,30,29,30,30], startAD: new Date(2015, 3, 14) },
+            2073: { days: [31,32,31,32,31,31,30,29,30,29,30,30], startAD: new Date(2016, 3, 13) },
+            2074: { days: [31,32,31,32,31,31,30,30,29,30,29,30], startAD: new Date(2017, 3, 14) },
+            2075: { days: [31,31,32,32,31,31,30,29,30,30,29,30], startAD: new Date(2018, 3, 14) },
+            2076: { days: [31,32,31,32,32,30,30,30,29,30,29,30], startAD: new Date(2019, 3, 14) },
+            2077: { days: [31,32,31,32,31,31,30,29,30,30,30,29], startAD: new Date(2020, 3, 13) },
+            2078: { days: [31,32,31,32,31,31,30,30,29,30,29,30], startAD: new Date(2021, 3, 14) },
+            2079: { days: [31,31,32,32,31,31,30,29,30,30,30,29], startAD: new Date(2022, 3, 14) },
+            2080: { days: [31,32,31,32,31,30,30,30,29,30,30,30], startAD: new Date(2023, 3, 14) },
+            2081: { days: [31,32,31,32,31,31,30,29,30,30,29,30], startAD: new Date(2024, 3, 13) },
+            2082: { days: [31,31,32,32,31,30,30,30,29,30,30,30], startAD: new Date(2025, 3, 14) },
+            2083: { days: [31,31,32,31,31,31,30,29,30,30,30,30], startAD: new Date(2026, 3, 14) },
+            2084: { days: [31,32,31,32,31,30,30,30,30,29,30,30], startAD: new Date(2027, 3, 14) },
+            2085: { days: [31,32,31,32,31,31,29,30,30,30,29,30], startAD: new Date(2028, 3, 13) }
+        };
 
+        const bsMonths = ["Baisakh","Jestha","Asar","Shrawan","Bhadra","Ashwin","Kartik","Mangsir","Poush","Magh","Falgun","Chaitra"];
+        const adMonths = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+        // State setup defaults to the verified operational date: Jestha 25, 2083 (June 8, 2026)
+        let currentBS = { year: 2083, month: 1, day: 25 }; 
+        let currentAD = { year: 2026, month: 5, day: 8 };
+        let viewBS = { ...currentBS }, viewAD = { ...currentAD };
+
+        function syncDates(fromBS) {
+            if (fromBS) {
+                let yearObj = bsData[currentBS.year];
+                let daysAccumulated = 0;
+                for (let m = 0; m < currentBS.month; m++) {
+                    daysAccumulated += yearObj.days[m];
+                }
+                daysAccumulated += (currentBS.day - 1);
+                
+                let targetDate = new Date(yearObj.startAD.getTime());
+                targetDate.setDate(targetDate.getDate() + daysAccumulated);
+                
+                currentAD = { year: targetDate.getFullYear(), month: targetDate.getMonth(), day: targetDate.getDate() };
+            } else {
+                let targetAD = new Date(currentAD.year, currentAD.month, currentAD.day);
+                let foundYear = START_BS;
+                
+                for (let y in bsData) {
+                    let nextY = parseInt(y) + 1;
+                    let nextStart = bsData[nextY] ? bsData[nextY].startAD : new Date(2029, 3, 13);
+                    if (targetAD >= bsData[y].startAD && targetAD < nextStart) {
+                        foundYear = parseInt(y);
+                        break;
+                    }
+                }
+                
+                let yearObj = bsData[foundYear];
+                let diffTime = targetAD.getTime() - yearObj.startAD.getTime();
+                let remDays = Math.round(diffTime / 86400000); 
+                
+                let m = 0;
+                while (remDays >= yearObj.days[m]) {
+                    remDays -= yearObj.days[m];
+                    m++;
+                }
+                currentBS = { year: foundYear, month: m, day: remDays + 1 };
+            }
+            viewBS = { ...currentBS }; viewAD = { ...currentAD };
+            document.getElementById('bs-input').value = `${currentBS.year}-${String(currentBS.month+1).padStart(2,'0')}-${String(currentBS.day).padStart(2,'0')}`;
+            document.getElementById('ad-input').value = `${currentAD.year}-${String(currentAD.month+1).padStart(2,'0')}-${String(currentAD.day).padStart(2,'0')}`;
+            render();
+        }
+
+        function renderGrid(type, year, month, selected, totalDays, startOffset, onSelect) {
+            document.getElementById(`${type}-year-select`).value = year;
+            document.getElementById(`${type}-month-select`).value = month;
+            const container = document.getElementById(`${type}-days-container);`);
+            const targetContainer = document.getElementById(`${type}-days-container`);
+            targetContainer.innerHTML = '';
+            
+            for (let s = 0; s < startOffset; s++) {
+                let emptyCell = document.createElement('div');
+                emptyCell.className = 'day-cell empty';
+                targetContainer.appendChild(emptyCell);
+            }
+            for (let d = 1; d <= totalDays; d++) {
+                let cell = document.createElement('div');
+                cell.className = `day-cell ${year===selected.year && month===selected.month && d===selected.day ? 'selected' : ''}`;
+                cell.textContent = d;
+                cell.onclick = () => onSelect(d);
+                targetContainer.appendChild(cell);
+            }
+        }
+
+        function render() {
+            let yearObj = bsData[viewBS.year];
+            let daysAccumulated = 0;
+            for (let m = 0; m < viewBS.month; m++) {
+                daysAccumulated += yearObj.days[m];
+            }
+            let firstDayAD = new Date(yearObj.startAD.getTime());
+            firstDayAD.setDate(firstDayAD.getDate() + daysAccumulated);
+            let bsStartOffset = firstDayAD.getDay();
+
+            renderGrid('bs', viewBS.year, viewBS.month, currentBS, bsData[viewBS.year].days[viewBS.month], bsStartOffset, d => { currentBS = { ...viewBS, day: d }; syncDates(true); toggle('bs', false); });
+            renderGrid('ad', viewAD.year, viewAD.month, currentAD, new Date(viewAD.year, viewAD.month + 1, 0).getDate(), new Date(viewAD.year, viewAD.month, 1).getDay(), d => { currentAD = { ...viewAD, day: d }; syncDates(false); toggle('ad', false); });
+        }
+
+        function changeMonth(type, dir) {
+            let view = type === 'bs' ? viewBS : viewAD;
+            view.month += dir;
+            if (view.month < 0) { view.month = 11; view.year--; }
+            else if (view.month > 11) { view.month = 0; view.year++; }
+            if (type === 'bs') {
+                if (view.year < START_BS) view.year = START_BS;
+                if (view.year > END_BS) view.year = END_BS;
+            }
+            render();
+        }
+
+        function toggle(type, force) {
+            const box = document.getElementById(`${type}-calendar-box`);
+            if (force !== undefined) {
+                box.classList.toggle('active', force);
+            } else {
+                box.classList.toggle('active');
+            }
+        }
+
+        function setupSelect(id, items, start, count, onChange) {
+            const el = document.getElementById(id);
+            el.innerHTML = ''; 
+            for (let i = 0; i < count; i++) el.add(new Option(items ? items[i] : start + i, start + i));
+            el.onchange = e => onChange(parseInt(e.target.value));
+        }
+
+        window.onclick = e => ['bs','ad'].forEach(t => { if(!e.target.closest(`#${t}-calendar-box`) && e.target.id !== `${t}-input`) toggle(t, false); });
+        document.getElementById('bs-input').onclick = (e) => { e.stopPropagation(); toggle('ad', false); toggle('bs', true); };
+        document.getElementById('ad-input').onclick = (e) => { e.stopPropagation(); toggle('bs', false); toggle('ad', true); };
+
+        // Dynamic select loop options matching config ranges
+        setupSelect('bs-year-select', null, START_BS, (END_BS - START_BS + 1), y => { viewBS.year = y; render(); });
+        setupSelect('bs-month-select', bsMonths, 0, 12, m => { viewBS.month = m; render(); });
+        setupSelect('ad-year-select', null, 2013, (2030 - 2013 + 1), y => { viewAD.year = y; render(); });
+        setupSelect('ad-month-select', adMonths, 0, 12, m => { viewAD.month = m; render(); });
+
+        // ==========================================
+        // ORIGINAL TRANSLATION & THEME LOGIC
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", function () {
             let mode = "english";
             const inputs = document.querySelectorAll(".lang-input");
-            const bsInput = document.getElementById("bs-date");
-            const adOutput = document.getElementById("ad-date");
+            const themeBtn = document.getElementById("themeToggle");
 
-            // ==========================================
-            // YOUR CUSTOM BS -> AD MATHEMATICAL CONVERTER
-            // ==========================================
-            bsInput.addEventListener("input", function () {
-                const value = this.value.trim();
-                const parts = value.split("-");
-
-                // Keep output empty while the user is still typing the full date layout
-                if (parts.length !== 3 || parts[2] === "") {
-                    adOutput.value = "";
-                    return;
-                }
-
-                const bsYear = parseInt(parts[0]);
-                const bsMonth = parseInt(parts[1]);
-                const bsDay = parseInt(parts[2]);
-
-                if (isNaN(bsYear) || isNaN(bsMonth) || isNaN(bsDay)) {
-                    adOutput.value = "Invalid input";
-                    return;
-                }
-
-                // Utilizing your custom conversion rules directly
-                let adYear = bsYear - 56;
-                let adMonth = bsMonth - 8;
-                let adDay = bsDay;
-
-                if (adMonth <= 0) {
-                    adYear -= 1;
-                    adMonth += 12;
-                }
-
-                const adDate = new Date(adYear, adMonth - 1, adDay);
-
-                // Format output cleanly into standard YYYY-MM-DD format
-                if (!isNaN(adDate.getTime())) {
-                    const yyyy = adDate.getFullYear();
-                    const mm = String(adDate.getMonth() + 1).padStart(2, '0');
-                    const dd = String(adDate.getDate()).padStart(2, '0');
-                    adOutput.value = `${yyyy}-${mm}-${dd}`;
-                } else {
-                    adOutput.value = "Invalid Date Calculation";
-                }
+            themeBtn.addEventListener("click", function () {
+                document.body.classList.toggle("dark-theme");
             });
 
-            // ==========================================
-            // NEPALI TEXT KEYBOARD SIMULATION
-            // ==========================================
             function toNepali(text) {
                 return text
                     .replace(/a/g, "अ")
@@ -241,14 +491,11 @@
                 });
             });
 
-            // ==========================================
-            // LANGUAGE TRIGGER HANDLERS
-            // ==========================================
             document.getElementById("btnEnglish").addEventListener("click", function () {
                 mode = "english";
                 inputs.forEach(i => i.value = "");
-                bsInput.value = "";
-                adOutput.value = "";
+                document.getElementById('bs-input').value = "";
+                document.getElementById('ad-input').value = "";
 
                 document.getElementById("formTitle").innerText = "Add Student Form";
                 document.getElementById("lblName").innerText = "Full Name";
@@ -266,8 +513,8 @@
             document.getElementById("btnNepali").addEventListener("click", function () {
                 mode = "nepali";
                 inputs.forEach(i => i.value = "");
-                bsInput.value = "";
-                adOutput.value = "";
+                document.getElementById('bs-input').value = "";
+                document.getElementById('ad-input').value = "";
 
                 document.getElementById("formTitle").innerText = "विद्यार्थी फारम";
                 document.getElementById("lblName").innerText = "पूरा नाम";
@@ -281,7 +528,11 @@
                 document.getElementById("lblPDF").innerText = "पीडीएफ";
                 document.getElementById("submitBtn").innerText = "पेश गर्नुहोस्";
             });
+
+            // Initialize Custom Calendar on page load
+            syncDates(true);
         });
     </script>
 </body>
+
 </html>
